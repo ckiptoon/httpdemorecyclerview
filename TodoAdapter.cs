@@ -15,28 +15,43 @@ namespace MyHttpDemo
 {
     public class TodoAdapter : RecyclerView.Adapter
     {
-        public override int ItemCount => throw new NotImplementedException();
+        List<Todo> _todos;
+
+        public TodoAdapter(List<Todo> todos)
+        {
+            _todos = todos;
+        }
+        public override int ItemCount => _todos.Count;
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
-            throw new NotImplementedException();
+            TodoAdapterViewHolder viewHolder = holder as TodoAdapterViewHolder;
+            viewHolder.TitleTextView.Text = _todos[position].Title;
+            viewHolder.UserIdTextView.Text = _todos[position].UserId.ToString();
+            viewHolder.CompletedCheckBox.Checked = _todos[position].Completed;
         }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            throw new NotImplementedException();
+            var inflater = LayoutInflater.FromContext(parent.Context);
+            View itemView = inflater.Inflate(Resource.Layout.todo_cardview, parent, false);
+            TodoAdapterViewHolder viewHolder = new TodoAdapterViewHolder(itemView);
+            return viewHolder;
         }
     }
 
     public class TodoAdapterViewHolder : RecyclerView.ViewHolder
     {
         //Your adapter views to re-use
-        public TextView TitleTextView { get; set; }
-        public TextView UserIdTextView { get; set; }
-        
+        public TextView TitleTextView { get; private set; }
+        public TextView UserIdTextView { get; private set; }        
+        public CheckBox CompletedCheckBox { get; private set; }
 
         public TodoAdapterViewHolder(View itemView) : base(itemView)
         {
+            TitleTextView = itemView.FindViewById<TextView>(Resource.Id.title);
+            UserIdTextView = itemView.FindViewById<TextView>(Resource.Id.userId);
+            CompletedCheckBox = itemView.FindViewById<CheckBox>(Resource.Id.completed);
         }
     }
 }
